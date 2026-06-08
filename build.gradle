@@ -12,8 +12,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 version = "1.0"
-group = "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+group = "com.example.afkbot" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "afkbot"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -75,3 +75,48 @@ processResources {
         exclude 'mcmod.info'
     }
 }
+
+// Post-build task to copy jar and commit to git
+task postBuild {
+    dependsOn build
+    doLast {
+        // Find the built jar file
+        FileCollection jarFiles = fileTree("build/libs").matching { include '*.jar' }
+        
+        if (jarFiles.files.isEmpty()) {
+            println "No jar file found in build/libs/"
+            return
+        }
+        
+        File sourceJar = jarFiles.files[0]
+        File targetJar = new File(projectDir, "mod.jar")
+        
+        // Copy the jar to the repository root
+        copy {
+            from sourceJar
+            into projectDir
+            rename sourceJar.name, "mod.jar"
+        }
+        
+        println "Copied ${sourceJar.name} to mod.jar"
+        
+        // Run git commands
+        try {
+            // Add mod.jar to git
+            "git add mod.jar".execute().waitFor()
+            println "Added mod.jar to git"
+            
+            // Commit the changes
+            "git commit -m \"updated mod\"".execute().waitFor()
+            println "Committed changes"
+            
+            // Push to remote
+            "git push".execute().waitFor()
+            println "Pushed to remote"
+        } catch (Exception e) {
+            println "Git operations completed (some may have been skipped if nothing changed)"
+        }
+    }
+}
+
+build.finalizedBy postBuild
