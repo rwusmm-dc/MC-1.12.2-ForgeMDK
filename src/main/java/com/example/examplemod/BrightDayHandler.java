@@ -1,0 +1,41 @@
+package com.example.examplemod;
+
+import net.minecraftforge.fml.common.eventbus.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+
+@SideOnly(Side.CLIENT)
+public class BrightDayHandler
+{
+    private static boolean isBrightDay = false;
+
+    public static void toggle()
+    {
+        isBrightDay = !isBrightDay;
+    }
+
+    public static boolean isBrightDayEnabled()
+    {
+        return isBrightDay;
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void onClientTick(TickEvent.ClientTickEvent event)
+    {
+        if (event.phase != TickEvent.Phase.END)
+        {
+            return;
+        }
+
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (isBrightDay && mc.world != null)
+        {
+            // Set maximum brightness/gamma
+            mc.gameSettings.gammaSetting = 100.0f; // Max gamma
+        }
+    }
+}

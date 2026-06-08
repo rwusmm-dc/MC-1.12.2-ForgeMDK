@@ -4,7 +4,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = AFKBotMod.MODID, name = AFKBotMod.NAME, version = AFKBotMod.VERSION, clientSideOnly = true)
@@ -29,11 +31,13 @@ public class AFKBotMod
     }
 
     @EventHandler
+    @SideOnly(Side.CLIENT)
     public void init(FMLInitializationEvent event)
     {
-        // Register commands
-        ClientCommandHandler.instance.registerCommand(new AFKBotCommand());
-        ClientCommandHandler.instance.registerCommand(new AFKBotDisableCommand());
+        // Register event handlers for client-side functionality
+        MinecraftForge.EVENT_BUS.register(ClientChatEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(AFKBotTickHandler.class);
+        MinecraftForge.EVENT_BUS.register(BrightDayHandler.class);
         logger.info("AFK Bot Mod initialized!");
     }
 }
