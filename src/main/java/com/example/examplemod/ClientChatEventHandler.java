@@ -1,6 +1,7 @@
 package com.example.examplemod;
 
 import net.minecraftforge.client.event.ClientChatEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventbus.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -8,6 +9,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.client.Minecraft;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 @SideOnly(Side.CLIENT)
 public class ClientChatEventHandler
 {

@@ -1,5 +1,6 @@
 package com.example.examplemod;
 
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventbus.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -8,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 @SideOnly(Side.CLIENT)
 public class AFKBotTickHandler
 {
